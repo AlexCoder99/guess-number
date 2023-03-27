@@ -1,0 +1,139 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guess the number</title>
+</head>
+<body>
+    <style>
+        body{
+            background: linear-gradient(90deg, rgba(131,58,180,1) 0%, rgba(59,120,95,1) 50%, rgba(252,176,69,1) 100%);
+            margin: 0 auto;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        section{
+            max-width: 600px;
+            margin: 200px auto;
+            padding: 20px;
+            border: 3px double #00d9ff;
+            border-radius: 8px;
+            box-shadow: 3px 3px 3px rgb(185, 228, 225);
+            background-color: aliceblue;
+        }
+
+
+    </style>
+    
+    <section>
+        <h3> Indovina il numero!</h3>
+        <p>Abbiamo selezionato un numero randomico fra 1 e 100. Vediamo se riesci a indovinarlo
+           in 10 turni o meno. Ti verrà segnalato se il tuo input è troppo basso o troppo alto rispetto al numero pensato!
+        </p>
+
+        <form >
+            <label for="number-guess">Prova a indovinare il numero:</label>
+            <input type="number" id="number-guess" autocomplete="off" >
+            <input type="submit" value="Prova!" id="submit">
+        </form>
+
+        <div class="wrapperGuess">
+            <p id="acc"></p>
+            <p id="risultato"></p>
+            <p id="fuochino"></p>
+        </div>
+
+    </section>
+
+<script>
+
+        const resetParas = document.querySelectorAll('.wrapperGuess p');
+        const acc = document.querySelector('#acc');
+        const risultato = document.querySelector('#risultato');
+        const fuochino = document.querySelector('#fuochino');
+       
+        const numberGuess = document.querySelector('input#number-guess');
+        const submit = document.querySelector('input#submit');
+
+        let randomNum = Math.ceil(Math.random() * 100);
+        let playerTurn = 1;
+        let resetButton;
+
+        function setGameOver(){
+            numberGuess.disabled = true;
+            submit.disabled = true;
+            resetButton = document.createElement('button');
+            resetButton.textContent = "Gioca di nuovo";
+            acc.parentElement.append(resetButton);
+            resetButton.addEventListener('click', resetGame);
+        }
+
+        function resetGame(){
+            for(const val of resetParas){
+                val.textContent = "";
+            };
+
+            resetButton.parentNode.removeChild(resetButton);
+
+            numberGuess.disabled = false;
+            submit.disabled = false;
+            numberGuess.value = '';
+            risultato.style.color = 'black';
+            playerTurn = 1;
+
+            randomNum = Math.ceil(Math.random() * 100);
+        }
+
+
+        function guessOrNot(){
+            const userNum = Number(numberGuess.value);
+            if(userNum > 100 || userNum < 1){
+                window.alert('Il numero inserito non è valido, riprova');
+                numberGuess.parentElement.reset();
+                return;
+            }
+            if(playerTurn == 1){acc.textContent = "Numeri immessi: "};
+            acc.textContent += `${userNum} `;
+
+            switch(true){
+                case(userNum == randomNum):
+                    risultato.textContent = "Corretto!";
+                    risultato.style.color = "green";   
+                    fuochino.textContent = `Bella, hai impiegato solo ${playerTurn} turni!`;
+                    setGameOver();  
+                    break;
+                case(userNum > randomNum):
+                    risultato.textContent = "Sbagliato!"
+                    risultato.style.color = "crimson";
+                    fuochino.textContent= "(Il tuo numero è troppo alto)";
+                    break;
+                case(userNum < randomNum):
+                    risultato.textContent = "Sbagliato!"
+                    risultato.style.color = "crimson";
+                    fuochino.textContent="(Il tuo numero è troppo basso)";
+                    break;
+                default: undefined;
+            }
+
+            playerTurn++;
+            numberGuess.parentElement.reset();
+            numberGuess.focus();
+            if(playerTurn > 10 && risultato.style.color == 'crimson'){
+                risultato.textContent = "Game Over!";
+                fuochino.textContent = "Hai esaurito i turni.";
+                setGameOver();
+            };
+            }
+
+
+        submit.addEventListener("click",(e) =>{
+        e.preventDefault();
+        e.stopPropagation();
+        guessOrNot();
+        });
+
+</script>
+
+</body>
+</html>
