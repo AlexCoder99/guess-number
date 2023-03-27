@@ -28,7 +28,7 @@
     
     <section>
         <h3> Indovina il numero!</h3>
-        <p>Abbiamo selezionato un numero randomico fra 1 e 100. Vediamo se riesci a indovinarlo
+        <p>Abbiamo selezionato un numero casuale fra 1 e 100. Vediamo se riesci a indovinarlo
            in 10 turni o meno. Ti verrà segnalato se il tuo input è troppo basso o troppo alto rispetto al numero pensato!
         </p>
 
@@ -100,7 +100,7 @@
                 case(userNum == randomNum):
                     risultato.textContent = "Corretto!";
                     risultato.style.color = "green";   
-                    fuochino.textContent = `Bella, hai impiegato solo ${playerTurn} turni!`;
+                    fuochino.textContent = `Bravo, hai impiegato solo ${playerTurn} turni!`;
                     setGameOver();  
                     break;
                 case(userNum > randomNum):
